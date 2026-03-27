@@ -129,23 +129,35 @@
     .service-name { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 12px; }
     .service-desc { font-size: 0.82rem; line-height: 1.8; opacity: 0.55; }
 
-    /* Gallery mosaic */
-    .gallery-mosaic { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: auto; gap: 4px; margin-top: 56px; }
-    .mosaic-item { background: var(--surface); overflow: hidden; position: relative; cursor: pointer; aspect-ratio: 1; }
-    .mosaic-item.wide { grid-column: span 2; aspect-ratio: 2/1; }
-    .mosaic-item.tall { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
+    /* Gallery grid */
+    .gallery-mosaic { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 56px; }
+    .mosaic-item { background: var(--surface); overflow: hidden; position: relative; cursor: pointer; aspect-ratio: 1; transition: transform 0.3s ease; }
     .mosaic-item .mosaic-inner {
       width: 100%; height: 100%;
       background: var(--surface);
       display: flex; align-items: center; justify-content: center;
-      transition: transform 0.6s ease;
+      transition: transform 0.3s ease;
     }
-    .mosaic-item:hover .mosaic-inner { transform: scale(1.04); }
+    .mosaic-item:hover { transform: translateY(-4px); }
+    .mosaic-item:hover .mosaic-inner { transform: scale(1.05); }
     .mosaic-bg { position: absolute; inset: 0; }
     .mosaic-overlay { position: absolute; inset: 0; background: rgba(13,13,13,0); transition: background 0.3s; display: flex; align-items: center; justify-content: center; }
-    .mosaic-item:hover .mosaic-overlay { background: rgba(13,13,13,0.4); }
-    .mosaic-label { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text); opacity: 0; transition: opacity 0.3s; }
+    .mosaic-item:hover .mosaic-overlay { background: rgba(13,13,13,0.5); }
+    .mosaic-label { font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text); opacity: 0; transition: opacity 0.3s; font-weight: 500; }
     .mosaic-item:hover .mosaic-label { opacity: 1; }
+
+    /* Modal */
+    .gallery-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 300; align-items: center; justify-content: center; padding: 24px; }
+    .gallery-modal.open { display: flex; }
+    .modal-content { position: relative; max-width: 90vw; max-height: 90vh; }
+    .modal-image { width: 100%; height: 100%; object-fit: contain; }
+    .modal-close { position: absolute; top: -48px; right: 0; background: none; border: none; color: var(--text); cursor: pointer; padding: 8px; transition: opacity 0.2s; }
+    .modal-close:hover { opacity: 0.6; }
+    .modal-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(201,169,110,0.2); border: 1px solid rgba(201,169,110,0.3); color: var(--accent); width: 44px; height: 44px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .modal-nav:hover { background: rgba(201,169,110,0.35); }
+    .modal-prev { left: -60px; }
+    .modal-next { right: -60px; }
+    .modal-title { position: absolute; bottom: -40px; left: 0; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.6; }
 
     /* Mosaic color palettes */
     .m1 { background: linear-gradient(135deg, #2a1f1a 0%, #1a1210 100%); }
@@ -260,8 +272,9 @@
       .service-name { font-size: 1.1rem; margin-bottom: 10px; }
       .service-desc { font-size: 0.76rem; line-height: 1.6; }
       .service-icon svg { width: 24px; height: 24px; margin-bottom: 12px; }
-      .gallery-mosaic { grid-template-columns: repeat(2, 1fr); gap: 2px; }
-      .gallery-mosaic .mosaic-item { aspect-ratio: 1; }
+      .gallery-mosaic { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .modal-prev { left: -50px; }
+      .modal-next { right: -50px; }
       .contact-wrap { gap: 32px; }
       .contact-info-icon { width: 36px; height: 36px; }
       .contact-info-label { font-size: 0.6rem; }
@@ -284,8 +297,10 @@
   <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full"><!-- Nav -->
-  <nav class="site-nav" id="site-nav" role="navigation" aria-label="Main navigation"><a href="#home" class="nav-logo" id="nav-logo">YUGA PHOTOS</a>
+ <body class="h-full">
+  <!-- Nav -->
+  <nav class="site-nav" id="site-nav" role="navigation" aria-label="Main navigation">
+   <a href="#home" class="nav-logo" id="nav-logo">YUGA PHOTOS</a>
    <ul class="nav-links" role="list">
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
@@ -293,9 +308,11 @@
     <li><a href="#contact">Contact</a></li>
    </ul><button class="nav-menu-btn" id="nav-menu-btn" aria-label="Open menu"> <i data-lucide="menu" style="width:24px;height:24px;"></i> </button>
   </nav><!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile navigation"><button class="mobile-close" id="mobile-close" aria-label="Close menu"> <i data-lucide="x" style="width:28px;height:28px;"></i> </button> <a href="#about" class="mobile-link">About</a> <a href="#services" class="mobile-link">Services</a> <a href="#gallery" class="mobile-link">Gallery</a> <a href="#contact" class="mobile-link">Contact</a>
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile navigation">
+   <button class="mobile-close" id="mobile-close" aria-label="Close menu"> <i data-lucide="x" style="width:28px;height:28px;"></i> </button> <a href="#about" class="mobile-link">About</a> <a href="#services" class="mobile-link">Services</a> <a href="#gallery" class="mobile-link">Gallery</a> <a href="#contact" class="mobile-link">Contact</a>
   </div>
-  <main id="home"><!-- Hero -->
+  <main id="home">
+   <!-- Hero -->
    <section class="hero" aria-label="Hero section">
     <div class="hero-bg"></div>
     <div class="hero-content">
@@ -303,14 +320,16 @@
      <h1 class="hero-title" id="hero-title">Life Through<br><em>The Lens</em></h1>
      <p class="hero-sub" id="hero-sub">Wedding Photography &amp; Videography · Every emotion, preserved forever</p><a href="#contact" class="hero-cta">Book a Session</a>
     </div>
-    <div class="hero-scroll" aria-hidden="true"><span>Scroll</span> <i data-lucide="chevron-down" style="width:16px;height:16px;"></i>
+    <div class="hero-scroll" aria-hidden="true">
+     <span>Scroll</span> <i data-lucide="chevron-down" style="width:16px;height:16px;"></i>
     </div>
    </section><!-- About -->
    <section class="section" id="about" aria-labelledby="about-heading">
     <div class="about-grid">
      <div class="about-visual">
       <div class="about-frame">
-       <div class="about-frame-inner"><i data-lucide="camera" style="width:64px;height:64px;opacity:0.25;color:#c9a96e;"></i> <span class="about-frame-label">Pranavam S</span>
+       <div class="about-frame-inner">
+        <i data-lucide="camera" style="width:64px;height:64px;opacity:0.25;color:#c9a96e;"></i> <span class="about-frame-label">Pranavam S</span>
        </div>
        <div class="about-corner tl"></div>
        <div class="about-corner br"></div>
@@ -363,8 +382,7 @@
        <div class="service-num">
         01
        </div>
-       <div class="service-icon">
-        <i data-lucide="heart" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="heart" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Wedding Photography</h3>
        <p class="service-desc">Full-day coverage of your wedding ceremony, rituals, and candid celebrations. Every laugh, every tear, every glance — preserved beautifully.</p>
@@ -373,8 +391,7 @@
        <div class="service-num">
         02
        </div>
-       <div class="service-icon">
-        <i data-lucide="video" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="video" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Wedding Videography</h3>
        <p class="service-desc">Cinematic wedding films that tell your love story. From highlight reels to full-length features, we craft memories you'll relive forever.</p>
@@ -383,8 +400,7 @@
        <div class="service-num">
         03
        </div>
-       <div class="service-icon">
-        <i data-lucide="users" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="users" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Pre-Wedding Shoots</h3>
        <p class="service-desc">Creative, expressive pre-wedding sessions that capture your unique chemistry in stunning locations across Tamil Nadu.</p>
@@ -393,8 +409,7 @@
        <div class="service-num">
         04
        </div>
-       <div class="service-icon">
-        <i data-lucide="star" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="star" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Events &amp; Functions</h3>
        <p class="service-desc">Engagements, receptions, baby showers, birthdays, corporate events — we cover every celebration with professional precision.</p>
@@ -403,8 +418,7 @@
        <div class="service-num">
         05
        </div>
-       <div class="service-icon">
-        <i data-lucide="image" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="image" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Portrait Sessions</h3>
        <p class="service-desc">Personal, family, and professional portrait photography crafted to reveal your true personality in every frame.</p>
@@ -413,8 +427,7 @@
        <div class="service-num">
         06
        </div>
-       <div class="service-icon">
-        <i data-lucide="film" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="film" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Short Films &amp; Reels</h3>
        <p class="service-desc">Creative short films and social media reels for personal milestones, brand stories, and special announcements.</p>
@@ -427,67 +440,76 @@
      <p class="section-label">Our Work</p>
      <h2 class="section-title" id="gallery-heading">A glimpse of<br><em>the moments</em></h2>
      <div class="gallery-mosaic" role="list" aria-label="Photo gallery">
-      <div class="mosaic-item wide" role="listitem">
+      <div class="mosaic-item" role="listitem" data-index="0">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m1" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="camera" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m1" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="camera" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Wedding</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Wedding</span>
        </div>
       </div>
-      <div class="mosaic-item tall" role="listitem">
+      <div class="mosaic-item" role="listitem" data-index="1">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m3" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="heart" style="width:36px;height:36px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m2" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="heart" style="width:36px;height:36px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Portrait</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Portrait</span>
        </div>
       </div>
-      <div class="mosaic-item" role="listitem">
+      <div class="mosaic-item" role="listitem" data-index="2">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m2" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="video" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m3" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="video" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Cinematic</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Cinematic</span>
        </div>
       </div>
-      <div class="mosaic-item" role="listitem">
+      <div class="mosaic-item" role="listitem" data-index="3">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m4" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="image" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m4" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="image" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Events</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Events</span>
        </div>
       </div>
-      <div class="mosaic-item" role="listitem">
+      <div class="mosaic-item" role="listitem" data-index="4">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m5" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="sun" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m5" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="sun" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Pre-Wedding</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Pre-Wedding</span>
        </div>
       </div>
-      <div class="mosaic-item wide" role="listitem">
+      <div class="mosaic-item" role="listitem" data-index="5">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m6" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="star" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m6" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="star" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Celebrations</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Celebrations</span>
        </div>
       </div>
-      <div class="mosaic-item" role="listitem">
+      <div class="mosaic-item" role="listitem" data-index="6">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m7" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="film" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m7" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="film" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Short Films</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Short Films</span>
+       </div>
+      </div>
+     </div>
+     <div class="gallery-modal" id="gallery-modal" role="dialog" aria-label="Photo viewer">
+      <div class="modal-content"><button class="modal-close" id="modal-close" aria-label="Close"><i data-lucide="x" style="width:28px;height:28px;"></i></button>
+       <div class="modal-image" id="modal-image" style="display:flex;align-items:center;justify-content:center;width:100%;height:60vh;background:var(--surface);border-radius:2px;"><i data-lucide="image" style="width:64px;height:64px;opacity:0.2;color:#c9a96e;"></i>
+       </div><button class="modal-nav modal-prev" id="modal-prev" aria-label="Previous"><i data-lucide="chevron-left" style="width:20px;height:20px;"></i></button> <button class="modal-nav modal-next" id="modal-next" aria-label="Next"><i data-lucide="chevron-right" style="width:20px;height:20px;"></i></button>
+       <div class="modal-title" id="modal-title">
+        Wedding
        </div>
       </div>
      </div>
@@ -498,11 +520,11 @@
      <p class="section-label">Get In Touch</p>
      <h2 class="section-title" id="contact-heading">Let's create something<br><em>beautiful together</em></h2>
      <div class="divider"></div>
-     <div class="contact-wrap"><!-- Info -->
+     <div class="contact-wrap">
+      <!-- Info -->
       <div>
        <div class="contact-info-item">
-        <div class="contact-info-icon">
-         <i data-lucide="map-pin"></i>
+        <div class="contact-info-icon"><i data-lucide="map-pin"></i>
         </div>
         <div>
          <div class="contact-info-label">
@@ -514,8 +536,7 @@
         </div>
        </div>
        <div class="contact-info-item">
-        <div class="contact-info-icon">
-         <i data-lucide="mail"></i>
+        <div class="contact-info-icon"><i data-lucide="mail"></i>
         </div>
         <div>
          <div class="contact-info-label">
@@ -527,8 +548,7 @@
         </div>
        </div>
        <div class="contact-info-item">
-        <div class="contact-info-icon">
-         <i data-lucide="phone"></i>
+        <div class="contact-info-icon"><i data-lucide="phone"></i>
         </div>
         <div>
          <div class="contact-info-label">
@@ -539,17 +559,22 @@
          </div>
         </div>
        </div><a href="https://wa.me/917871727575" target="_blank" rel="noopener noreferrer" class="wa-btn" id="wa-btn">
-        <svg viewbox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+        <svg viewbox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
         </svg> Message on WhatsApp </a>
       </div><!-- Form -->
       <form class="contact-form" id="contact-form" novalidate>
-       <div class="form-field"><label for="f-name">Your Name</label> <input type="text" id="f-name" placeholder="Enter your name" required>
+       <div class="form-field">
+        <label for="f-name">Your Name</label> <input type="text" id="f-name" placeholder="Enter your name" required>
        </div>
-       <div class="form-field"><label for="f-phone">Phone Number</label> <input type="tel" id="f-phone" placeholder="Your phone number">
+       <div class="form-field">
+        <label for="f-phone">Phone Number</label> <input type="tel" id="f-phone" placeholder="Your phone number">
        </div>
-       <div class="form-field"><label for="f-service">Service Required</label> <select id="f-service"> <option value="">Select a service</option> <option>Wedding Photography</option> <option>Wedding Videography</option> <option>Pre-Wedding Shoot</option> <option>Events &amp; Functions</option> <option>Portrait Session</option> <option>Short Films &amp; Reels</option> <option>Other</option> </select>
+       <div class="form-field">
+        <label for="f-service">Service Required</label> <select id="f-service"> <option value="">Select a service</option> <option>Wedding Photography</option> <option>Wedding Videography</option> <option>Pre-Wedding Shoot</option> <option>Events &amp; Functions</option> <option>Portrait Session</option> <option>Short Films &amp; Reels</option> <option>Other</option> </select>
        </div>
-       <div class="form-field"><label for="f-message">Message</label> <textarea id="f-message" rows="4" placeholder="Tell us about your event date, location, and any special requirements..."></textarea>
+       <div class="form-field">
+        <label for="f-message">Message</label> <textarea id="f-message" rows="4" placeholder="Tell us about your event date, location, and any special requirements..."></textarea>
        </div><button type="submit" class="form-submit">Send Enquiry</button>
        <div class="form-success" id="form-success" role="alert">
         ✓ &nbsp; Thank you! We'll reach out to you shortly on WhatsApp.
@@ -563,12 +588,79 @@
    <div class="footer-logo" id="footer-logo">
     YUGA <span>PHOTOS</span>
    </div>
-   <nav class="footer-links" aria-label="Footer navigation"><a href="#about">About</a> <a href="#services">Services</a> <a href="#gallery">Gallery</a> <a href="#contact">Contact</a>
+   <nav class="footer-links" aria-label="Footer navigation">
+    <a href="#about">About</a> <a href="#services">Services</a> <a href="#gallery">Gallery</a> <a href="#contact">Contact</a>
    </nav>
    <p class="footer-copy" id="footer-copy">© 2024 Yuga Photos · Pranavam S · Coimbatore, Tamil Nadu</p>
   </footer>
   <script>
   lucide.createIcons();
+
+  // Gallery modal
+  const galleryData = [
+    { title: 'Wedding', icon: 'camera' },
+    { title: 'Portrait', icon: 'heart' },
+    { title: 'Cinematic', icon: 'video' },
+    { title: 'Events', icon: 'image' },
+    { title: 'Pre-Wedding', icon: 'sun' },
+    { title: 'Celebrations', icon: 'star' },
+    { title: 'Short Films', icon: 'film' }
+  ];
+
+  let currentPhotoIndex = 0;
+  const modal = document.getElementById('gallery-modal');
+  const modalImage = document.getElementById('modal-image');
+  const modalTitle = document.getElementById('modal-title');
+
+  function openPhoto(index) {
+    currentPhotoIndex = index;
+    const photo = galleryData[index];
+    modalTitle.textContent = photo.title;
+    modalImage.innerHTML = `<i data-lucide="${photo.icon}" style="width:80px;height:80px;opacity:0.25;color:#c9a96e;"></i>`;
+    lucide.createIcons();
+    modal.classList.add('open');
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+  }
+
+  function nextPhoto() {
+    currentPhotoIndex = (currentPhotoIndex + 1) % galleryData.length;
+    openPhoto(currentPhotoIndex);
+  }
+
+  function prevPhoto() {
+    currentPhotoIndex = (currentPhotoIndex - 1 + galleryData.length) % galleryData.length;
+    openPhoto(currentPhotoIndex);
+  }
+
+  // Gallery items click
+  document.querySelectorAll('.mosaic-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const index = parseInt(item.dataset.index);
+      openPhoto(index);
+    });
+  });
+
+  // Modal controls
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-prev').addEventListener('click', prevPhoto);
+  document.getElementById('modal-next').addEventListener('click', nextPhoto);
+
+  // Close on background click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (modal.classList.contains('open')) {
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft') prevPhoto();
+      if (e.key === 'ArrowRight') nextPhoto();
+    }
+  });
 
   // Nav scroll
   const nav = document.getElementById('site-nav');
@@ -686,5 +778,6 @@
     ])
   });
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e2f7fb433e1a27c',t:'MTc3NDYyNjA4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e2f836a3157ae3d',t:'MTc3NDYyNjIzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
