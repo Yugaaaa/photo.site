@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuga Photos</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --surface: #1a1a1a;
+      --text: #e8e0d5;
+      --accent: #c9a96e;
+      --muted: #6b6b6b;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: var(--bg); color: var(--text); }
+    body { font-family: 'Jost', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    /* Nav */
+    .site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 24px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(13,13,13,0.95) 0%, transparent 100%);
+      transition: background 0.3s;
+    }
+    .site-nav.scrolled { background: rgba(13,13,13,0.97); }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; letter-spacing: 0.15em; color: var(--text); text-decoration: none; }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text); text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 1; }
+    .nav-menu-btn { display: none; background: none; border: none; color: var(--text); cursor: pointer; }
+
+    /* Hero */
+    .hero {
+      height: 100%;
+      min-height: 600px;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, rgba(13,13,13,0.6) 0%, rgba(13,13,13,0.3) 50%, rgba(13,13,13,0.7) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Cdefs%3E%3CradialGradient id='a' cx='30%25' cy='40%25' r='60%25'%3E%3Cstop offset='0' stop-color='%23c9a96e' stop-opacity='.18'/%3E%3Cstop offset='1' stop-color='%230d0d0d' stop-opacity='1'/%3E%3C/radialGradient%3E%3CradialGradient id='b' cx='75%25' cy='65%25' r='50%25'%3E%3Cstop offset='0' stop-color='%23a0785a' stop-opacity='.12'/%3E%3Cstop offset='1' stop-color='transparent'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='%230d0d0d'/%3E%3Crect width='800' height='600' fill='url(%23a)'/%3E%3Crect width='800' height='600' fill='url(%23b)'/%3E%3Ccircle cx='200' cy='150' r='3' fill='%23c9a96e' opacity='.3'/%3E%3Ccircle cx='600' cy='100' r='2' fill='%23c9a96e' opacity='.2'/%3E%3Ccircle cx='700' cy='400' r='4' fill='%23c9a96e' opacity='.15'/%3E%3Ccircle cx='100' cy='450' r='2' fill='%23c9a96e' opacity='.2'/%3E%3C/svg%3E");
+      background-size: cover; background-position: center;
+    }
+    .hero-content { position: relative; text-align: center; padding: 0 24px; animation: fadeUp 1.2s ease forwards; }
+    .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.5rem, 8vw, 7rem); font-weight: 300; line-height: 1.05; letter-spacing: 0.05em; margin-bottom: 24px; }
+    .hero-title em { font-style: italic; color: var(--accent); }
+    .hero-sub { font-size: 0.9rem; letter-spacing: 0.15em; opacity: 0.6; margin-bottom: 48px; }
+    .hero-cta {
+      display: inline-block; padding: 14px 40px;
+      border: 1px solid var(--accent); color: var(--accent);
+      font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+      text-decoration: none; transition: background 0.25s, color 0.25s;
+    }
+    .hero-cta:hover { background: var(--accent); color: var(--bg); }
+    .hero-scroll { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0.4; animation: bounce 2s infinite; }
+    .hero-scroll span { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; }
+
+    /* Sections */
+    .section { padding: 96px 48px; }
+    .section-label { font-size: 0.68rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.15; }
+    .section-title em { font-style: italic; color: var(--accent); }
+    .divider { width: 48px; height: 1px; background: var(--accent); margin: 32px 0; }
+
+    /* About */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1100px; margin: 0 auto; }
+    .about-visual { position: relative; }
+    .about-frame {
+      width: 100%; aspect-ratio: 3/4;
+      background: var(--surface);
+      border: 1px solid rgba(201,169,110,0.2);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .about-frame-inner {
+      width: 85%; height: 85%;
+      background: linear-gradient(145deg, #1e1e1e, #252525);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    }
+    .about-frame svg { width: 64px; height: 64px; opacity: 0.3; color: var(--accent); }
+    .about-frame-label { font-size: 0.7rem; letter-spacing: 0.3em; opacity: 0.3; text-transform: uppercase; }
+    .about-corner { position: absolute; width: 24px; height: 24px; border-color: var(--accent); border-style: solid; opacity: 0.5; }
+    .about-corner.tl { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+    .about-corner.br { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+    .about-year {
+      position: absolute; bottom: -20px; right: -20px;
+      background: var(--accent); color: var(--bg);
+      font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; letter-spacing: 0.1em;
+      padding: 20px 24px; font-weight: 600;
+    }
+    .about-text p { font-size: 0.95rem; line-height: 1.9; opacity: 0.75; margin-bottom: 20px; }
+    .about-stats { display: flex; gap: 40px; margin-top: 40px; }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; margin-top: 4px; }
+
+    /* Services */
+    .services-section { background: var(--surface); }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; }
+    .service-card {
+      background: var(--bg); padding: 48px 36px;
+      border-top: 1px solid rgba(201,169,110,0.15);
+      transition: border-color 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: var(--accent); transform: scaleX(0); transition: transform 0.3s; transform-origin: left;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-num { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300; color: rgba(201,169,110,0.15); line-height: 1; margin-bottom: 24px; }
+    .service-icon { margin-bottom: 20px; color: var(--accent); }
+    .service-icon svg { width: 28px; height: 28px; }
+    .service-name { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 12px; }
+    .service-desc { font-size: 0.82rem; line-height: 1.8; opacity: 0.55; }
+
+    /* Gallery mosaic */
+    .gallery-mosaic { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 220px); gap: 4px; margin-top: 56px; }
+    .mosaic-item { background: var(--surface); overflow: hidden; position: relative; cursor: pointer; }
+    .mosaic-item.wide { grid-column: span 2; }
+    .mosaic-item.tall { grid-row: span 2; }
+    .mosaic-item .mosaic-inner {
+      width: 100%; height: 100%;
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.6s ease;
+    }
+    .mosaic-item:hover .mosaic-inner { transform: scale(1.04); }
+    .mosaic-bg { position: absolute; inset: 0; }
+    .mosaic-overlay { position: absolute; inset: 0; background: rgba(13,13,13,0); transition: background 0.3s; display: flex; align-items: center; justify-content: center; }
+    .mosaic-item:hover .mosaic-overlay { background: rgba(13,13,13,0.4); }
+    .mosaic-label { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text); opacity: 0; transition: opacity 0.3s; }
+    .mosaic-item:hover .mosaic-label { opacity: 1; }
+
+    /* Mosaic color palettes */
+    .m1 { background: linear-gradient(135deg, #2a1f1a 0%, #1a1210 100%); }
+    .m2 { background: linear-gradient(135deg, #1a1f2a 0%, #101520 100%); }
+    .m3 { background: linear-gradient(160deg, #241a10 0%, #3a2a1a 50%, #1a1208 100%); }
+    .m4 { background: linear-gradient(135deg, #1f2a1a 0%, #121a10 100%); }
+    .m5 { background: linear-gradient(135deg, #2a1a25 0%, #1a0f18 100%); }
+    .m6 { background: linear-gradient(135deg, #1a2a2a 0%, #0f1a1a 100%); }
+    .m7 { background: linear-gradient(135deg, #2a251a 0%, #1a180f 100%); }
+
+    /* Contact */
+    .contact-wrap { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: start; }
+    .contact-info-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 28px; }
+    .contact-info-icon { width: 40px; height: 40px; border: 1px solid rgba(201,169,110,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--accent); }
+    .contact-info-icon svg { width: 16px; height: 16px; }
+    .contact-info-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.4; margin-bottom: 4px; }
+    .contact-info-value { font-size: 0.92rem; opacity: 0.85; }
+    .wa-btn {
+      display: flex; align-items: center; gap: 12px;
+      background: #25D366; color: #fff;
+      padding: 14px 28px; border: none; cursor: pointer;
+      font-family: 'Jost', sans-serif; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+      text-decoration: none; transition: opacity 0.2s; margin-top: 16px;
+    }
+    .wa-btn:hover { opacity: 0.88; }
+    .wa-btn svg { width: 20px; height: 20px; }
+
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 20px; }
+    .form-field { display: flex; flex-direction: column; gap: 8px; }
+    .form-field label { font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.5; }
+    .form-field input, .form-field textarea, .form-field select {
+      background: var(--surface); border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text); padding: 14px 16px; font-family: 'Jost', sans-serif;
+      font-size: 0.88rem; outline: none; transition: border-color 0.2s; resize: none;
+    }
+    .form-field input:focus, .form-field textarea:focus, .form-field select:focus { border-color: var(--accent); }
+    .form-field select option { background: var(--surface); }
+    .form-submit {
+      background: var(--accent); color: var(--bg); border: none; padding: 16px 40px;
+      font-family: 'Jost', sans-serif; font-size: 0.78rem; letter-spacing: 0.25em;
+      text-transform: uppercase; cursor: pointer; transition: opacity 0.2s; align-self: flex-start;
+    }
+    .form-submit:hover { opacity: 0.88; }
+    .form-success { display: none; background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.3); padding: 16px 20px; font-size: 0.85rem; color: var(--accent); }
+
+    /* Footer */
+    .site-footer {
+      background: #080808; padding: 48px 48px 32px;
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px;
+      border-top: 1px solid rgba(201,169,110,0.1);
+    }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; letter-spacing: 0.2em; color: var(--text); }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.4; color: var(--text); text-decoration: none; transition: opacity 0.2s; }
+    .footer-links a:hover { opacity: 0.85; }
+    .footer-copy { font-size: 0.7rem; opacity: 0.25; letter-spacing: 0.1em; }
+
+    /* Mobile nav */
+    .mobile-menu { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--text); text-decoration: none; letter-spacing: 0.1em; }
+    .mobile-close { position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--text); cursor: pointer; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+    @media (max-width: 900px) {
+      .site-nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .nav-menu-btn { display: block; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .about-visual { max-width: 320px; margin: 0 auto; }
+      .services-grid { grid-template-columns: 1fr; gap: 2px; }
+      .gallery-mosaic { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+      .mosaic-item.wide { grid-column: span 1; }
+      .mosaic-item.tall { grid-row: span 1; }
+      .gallery-mosaic .mosaic-item { height: 180px; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
+      .section { padding: 64px 24px; }
+      .hero-title { font-size: 3rem; }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full"><!-- Nav -->
+  <nav class="site-nav" id="site-nav" role="navigation" aria-label="Main navigation"><a href="#home" class="nav-logo" id="nav-logo">YUGA PHOTOS</a>
+   <ul class="nav-links" role="list">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+   </ul><button class="nav-menu-btn" id="nav-menu-btn" aria-label="Open menu"> <i data-lucide="menu" style="width:24px;height:24px;"></i> </button>
+  </nav><!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile navigation"><button class="mobile-close" id="mobile-close" aria-label="Close menu"> <i data-lucide="x" style="width:28px;height:28px;"></i> </button> <a href="#about" class="mobile-link">About</a> <a href="#services" class="mobile-link">Services</a> <a href="#gallery" class="mobile-link">Gallery</a> <a href="#contact" class="mobile-link">Contact</a>
+  </div>
+  <main id="home"><!-- Hero -->
+   <section class="hero" aria-label="Hero section">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+     <p class="hero-eyebrow" id="hero-eyebrow">Coimbatore, Tamil Nadu · Est. 2010</p>
+     <h1 class="hero-title" id="hero-title">Life Through<br><em>The Lens</em></h1>
+     <p class="hero-sub" id="hero-sub">Wedding Photography &amp; Videography · Every emotion, preserved forever</p><a href="#contact" class="hero-cta">Book a Session</a>
+    </div>
+    <div class="hero-scroll" aria-hidden="true"><span>Scroll</span> <i data-lucide="chevron-down" style="width:16px;height:16px;"></i>
+    </div>
+   </section><!-- About -->
+   <section class="section" id="about" aria-labelledby="about-heading">
+    <div class="about-grid">
+     <div class="about-visual">
+      <div class="about-frame">
+       <div class="about-frame-inner"><i data-lucide="camera" style="width:64px;height:64px;opacity:0.25;color:#c9a96e;"></i> <span class="about-frame-label">Pranavam S</span>
+       </div>
+       <div class="about-corner tl"></div>
+       <div class="about-corner br"></div>
+      </div>
+      <div class="about-year" id="about-year">
+       Est. 2010
+      </div>
+     </div>
+     <div class="about-text">
+      <p class="section-label">About The Artist</p>
+      <h2 class="section-title" id="about-heading">Stories told in<br><em>light &amp; shadow</em></h2>
+      <div class="divider"></div>
+      <p id="about-para1">I'm <strong style="color:var(--accent);" id="about-name">Pranavam S</strong>, the eye behind Yuga Photos. Based in the heart of Coimbatore, I've spent over a decade chasing beautiful light and capturing the raw, unscripted emotions that make life extraordinary.</p>
+      <p id="about-para2">From grand wedding ceremonies to quiet intimate portraits, every frame I create is a promise — that your most treasured moments will live on, exactly as they felt.</p>
+      <div class="about-stats">
+       <div>
+        <div class="stat-num">
+         14+
+        </div>
+        <div class="stat-label">
+         Years of Experience
+        </div>
+       </div>
+       <div>
+        <div class="stat-num">
+         500+
+        </div>
+        <div class="stat-label">
+         Weddings Covered
+        </div>
+       </div>
+       <div>
+        <div class="stat-num">
+         ∞
+        </div>
+        <div class="stat-label">
+         Memories Made
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Services -->
+   <section class="section services-section" id="services" aria-labelledby="services-heading">
+    <div style="max-width:1100px;margin:0 auto;">
+     <p class="section-label">What We Do</p>
+     <h2 class="section-title" id="services-heading">Our <em>Services</em></h2>
+     <div class="services-grid">
+      <div class="service-card">
+       <div class="service-num">
+        01
+       </div>
+       <div class="service-icon">
+        <i data-lucide="heart" style="width:28px;height:28px;"></i>
+       </div>
+       <h3 class="service-name">Wedding Photography</h3>
+       <p class="service-desc">Full-day coverage of your wedding ceremony, rituals, and candid celebrations. Every laugh, every tear, every glance — preserved beautifully.</p>
+      </div>
+      <div class="service-card">
+       <div class="service-num">
+        02
+       </div>
+       <div class="service-icon">
+        <i data-lucide="video" style="width:28px;height:28px;"></i>
+       </div>
+       <h3 class="service-name">Wedding Videography</h3>
+       <p class="service-desc">Cinematic wedding films that tell your love story. From highlight reels to full-length features, we craft memories you'll relive forever.</p>
+      </div>
+      <div class="service-card">
+       <div class="service-num">
+        03
+       </div>
+       <div class="service-icon">
+        <i data-lucide="users" style="width:28px;height:28px;"></i>
+       </div>
+       <h3 class="service-name">Pre-Wedding Shoots</h3>
+       <p class="service-desc">Creative, expressive pre-wedding sessions that capture your unique chemistry in stunning locations across Tamil Nadu.</p>
+      </div>
+      <div class="service-card">
+       <div class="service-num">
+        04
+       </div>
+       <div class="service-icon">
+        <i data-lucide="star" style="width:28px;height:28px;"></i>
+       </div>
+       <h3 class="service-name">Events &amp; Functions</h3>
+       <p class="service-desc">Engagements, receptions, baby showers, birthdays, corporate events — we cover every celebration with professional precision.</p>
+      </div>
+      <div class="service-card">
+       <div class="service-num">
+        05
+       </div>
+       <div class="service-icon">
+        <i data-lucide="image" style="width:28px;height:28px;"></i>
+       </div>
+       <h3 class="service-name">Portrait Sessions</h3>
+       <p class="service-desc">Personal, family, and professional portrait photography crafted to reveal your true personality in every frame.</p>
+      </div>
+      <div class="service-card">
+       <div class="service-num">
+        06
+       </div>
+       <div class="service-icon">
+        <i data-lucide="film" style="width:28px;height:28px;"></i>
+       </div>
+       <h3 class="service-name">Short Films &amp; Reels</h3>
+       <p class="service-desc">Creative short films and social media reels for personal milestones, brand stories, and special announcements.</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- Gallery -->
+   <section class="section" id="gallery" aria-labelledby="gallery-heading">
+    <div style="max-width:1200px;margin:0 auto;">
+     <p class="section-label">Our Work</p>
+     <h2 class="section-title" id="gallery-heading">A glimpse of<br><em>the moments</em></h2>
+     <div class="gallery-mosaic" role="list" aria-label="Photo gallery">
+      <div class="mosaic-item wide" role="listitem">
+       <div class="mosaic-inner">
+        <div class="mosaic-bg m1" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="camera" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
+        </div>
+       </div>
+       <div class="mosaic-overlay">
+        <span class="mosaic-label">Wedding</span>
+       </div>
+      </div>
+      <div class="mosaic-item tall" role="listitem">
+       <div class="mosaic-inner">
+        <div class="mosaic-bg m3" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="heart" style="width:36px;height:36px;opacity:0.15;color:#c9a96e;"></i>
+        </div>
+       </div>
+       <div class="mosaic-overlay">
+        <span class="mosaic-label">Portrait</span>
+       </div>
+      </div>
+      <div class="mosaic-item" role="listitem">
+       <div class="mosaic-inner">
+        <div class="mosaic-bg m2" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="video" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        </div>
+       </div>
+       <div class="mosaic-overlay">
+        <span class="mosaic-label">Cinematic</span>
+       </div>
+      </div>
+      <div class="mosaic-item" role="listitem">
+       <div class="mosaic-inner">
+        <div class="mosaic-bg m4" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="image" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        </div>
+       </div>
+       <div class="mosaic-overlay">
+        <span class="mosaic-label">Events</span>
+       </div>
+      </div>
+      <div class="mosaic-item" role="listitem">
+       <div class="mosaic-inner">
+        <div class="mosaic-bg m5" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="sun" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        </div>
+       </div>
+       <div class="mosaic-overlay">
+        <span class="mosaic-label">Pre-Wedding</span>
+       </div>
+      </div>
+      <div class="mosaic-item wide" role="listitem">
+       <div class="mosaic-inner">
+        <div class="mosaic-bg m6" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="star" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
+        </div>
+       </div>
+       <div class="mosaic-overlay">
+        <span class="mosaic-label">Celebrations</span>
+       </div>
+      </div>
+      <div class="mosaic-item" role="listitem">
+       <div class="mosaic-inner">
+        <div class="mosaic-bg m7" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="film" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        </div>
+       </div>
+       <div class="mosaic-overlay">
+        <span class="mosaic-label">Short Films</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Contact -->
+   <section class="section services-section" id="contact" aria-labelledby="contact-heading">
+    <div style="max-width:1000px;margin:0 auto;">
+     <p class="section-label">Get In Touch</p>
+     <h2 class="section-title" id="contact-heading">Let's create something<br><em>beautiful together</em></h2>
+     <div class="divider"></div>
+     <div class="contact-wrap"><!-- Info -->
+      <div>
+       <div class="contact-info-item">
+        <div class="contact-info-icon">
+         <i data-lucide="map-pin"></i>
+        </div>
+        <div>
+         <div class="contact-info-label">
+          Location
+         </div>
+         <div class="contact-info-value" id="contact-location">
+          Coimbatore, Tamil Nadu
+         </div>
+        </div>
+       </div>
+       <div class="contact-info-item">
+        <div class="contact-info-icon">
+         <i data-lucide="mail"></i>
+        </div>
+        <div>
+         <div class="contact-info-label">
+          Email
+         </div>
+         <div class="contact-info-value" id="contact-email">
+          yugatamil@gmail.com
+         </div>
+        </div>
+       </div>
+       <div class="contact-info-item">
+        <div class="contact-info-icon">
+         <i data-lucide="phone"></i>
+        </div>
+        <div>
+         <div class="contact-info-label">
+          Phone
+         </div>
+         <div class="contact-info-value" id="contact-phone">
+          +91 78717 27575
+         </div>
+        </div>
+       </div><a href="https://wa.me/917871727575" target="_blank" rel="noopener noreferrer" class="wa-btn" id="wa-btn">
+        <svg viewbox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+        </svg> Message on WhatsApp </a>
+      </div><!-- Form -->
+      <form class="contact-form" id="contact-form" novalidate>
+       <div class="form-field"><label for="f-name">Your Name</label> <input type="text" id="f-name" placeholder="Enter your name" required>
+       </div>
+       <div class="form-field"><label for="f-phone">Phone Number</label> <input type="tel" id="f-phone" placeholder="Your phone number">
+       </div>
+       <div class="form-field"><label for="f-service">Service Required</label> <select id="f-service"> <option value="">Select a service</option> <option>Wedding Photography</option> <option>Wedding Videography</option> <option>Pre-Wedding Shoot</option> <option>Events &amp; Functions</option> <option>Portrait Session</option> <option>Short Films &amp; Reels</option> <option>Other</option> </select>
+       </div>
+       <div class="form-field"><label for="f-message">Message</label> <textarea id="f-message" rows="4" placeholder="Tell us about your event date, location, and any special requirements..."></textarea>
+       </div><button type="submit" class="form-submit">Send Enquiry</button>
+       <div class="form-success" id="form-success" role="alert">
+        ✓ &nbsp; Thank you! We'll reach out to you shortly on WhatsApp.
+       </div>
+      </form>
+     </div>
+    </div>
+   </section>
+  </main><!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+   <div class="footer-logo" id="footer-logo">
+    YUGA <span>PHOTOS</span>
+   </div>
+   <nav class="footer-links" aria-label="Footer navigation"><a href="#about">About</a> <a href="#services">Services</a> <a href="#gallery">Gallery</a> <a href="#contact">Contact</a>
+   </nav>
+   <p class="footer-copy" id="footer-copy">© 2024 Yuga Photos · Pranavam S · Coimbatore, Tamil Nadu</p>
+  </footer>
+  <script>
+  lucide.createIcons();
+
+  // Nav scroll
+  const nav = document.getElementById('site-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile menu
+  document.getElementById('nav-menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.add('open');
+  });
+  document.getElementById('mobile-close').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.remove('open');
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.remove('open');
+    });
+  });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Contact form → WhatsApp redirect
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const service = document.getElementById('f-service').value;
+    const message = document.getElementById('f-message').value.trim();
+
+    if (!name) { document.getElementById('f-name').focus(); return; }
+
+    const text = `Hello Yuga Photos! 👋\n\nName: ${name}\nPhone: ${phone || 'N/A'}\nService: ${service || 'N/A'}\n\nMessage: ${message || 'I'd like to enquire about your services.'}`;
+    const encoded = encodeURIComponent(text);
+    window.open(`https://wa.me/917871727575?text=${encoded}`, '_blank');
+
+    document.getElementById('form-success').style.display = 'block';
+    this.reset();
+    setTimeout(() => { document.getElementById('form-success').style.display = 'none'; }, 5000);
+  });
+
+  // Element SDK
+  const defaultConfig = {
+    site_name: 'YUGA PHOTOS',
+    photographer_name: 'Pranavam S',
+    tagline: 'Capturing life\'s most precious moments',
+    location: 'Coimbatore, Tamil Nadu',
+    email: 'yugatamil@gmail.com',
+    phone: '7871727575',
+    background_color: '#0d0d0d',
+    surface_color: '#1a1a1a',
+    text_color: '#e8e0d5',
+    accent_color: '#c9a96e',
+    font_family: 'Cormorant Garamond',
+    font_size: 16
+  };
+
+  window.elementSdk && window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => {
+      const c = key => config[key] || defaultConfig[key];
+      document.getElementById('nav-logo').textContent = c('site_name');
+      document.getElementById('footer-logo').innerHTML = c('site_name').replace(' ', ' <span style="color:var(--accent)">') + '</span>';
+      document.getElementById('hero-sub').textContent = 'Wedding Photography & Videography · ' + c('tagline');
+      document.getElementById('hero-eyebrow').textContent = c('location') + ' · Est. 2010';
+      document.getElementById('about-name').textContent = c('photographer_name');
+      document.getElementById('contact-location').textContent = c('location');
+      document.getElementById('contact-email').textContent = c('email');
+      document.getElementById('contact-phone').textContent = '+91 ' + c('phone');
+      document.getElementById('footer-copy').textContent = '© 2024 ' + c('site_name') + ' · ' + c('photographer_name') + ' · ' + c('location');
+
+      const bg = c('background_color');
+      const surface = c('surface_color');
+      const text = c('text_color');
+      const accent = c('accent_color');
+      document.documentElement.style.setProperty('--bg', bg);
+      document.documentElement.style.setProperty('--surface', surface);
+      document.documentElement.style.setProperty('--text', text);
+      document.documentElement.style.setProperty('--accent', accent);
+
+      const font = c('font_family');
+      const size = c('font_size');
+      document.querySelectorAll('.hero-title, .section-title, .footer-logo, .nav-logo, .service-name').forEach(el => {
+        el.style.fontFamily = `${font}, 'Cormorant Garamond', serif`;
+      });
+      document.body.style.fontSize = `${size}px`;
+    },
+    mapToCapabilities: (config) => ({
+      recolorables: [
+        { get: () => config.background_color || defaultConfig.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+        { get: () => config.surface_color || defaultConfig.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => config.text_color || defaultConfig.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => config.accent_color || defaultConfig.accent_color, set: v => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+      ],
+      borderables: [],
+      fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: v => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+      fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: v => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+    }),
+    mapToEditPanelValues: (config) => new Map([
+      ['site_name', config.site_name || defaultConfig.site_name],
+      ['photographer_name', config.photographer_name || defaultConfig.photographer_name],
+      ['tagline', config.tagline || defaultConfig.tagline],
+      ['location', config.location || defaultConfig.location],
+      ['email', config.email || defaultConfig.email],
+      ['phone', config.phone || defaultConfig.phone],
+    ])
+  });
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e2f6fe090356470',t:'MTc3NDYyNTQzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
