@@ -214,26 +214,98 @@
     @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
 
     @media (max-width: 900px) {
-      .site-nav { padding: 20px 24px; }
+      .site-nav { padding: 16px 20px; }
       .nav-links { display: none; }
       .nav-menu-btn { display: block; }
       .about-grid { grid-template-columns: 1fr; gap: 48px; }
-      .about-visual { max-width: 320px; margin: 0 auto; }
+      .about-visual { max-width: 280px; margin: 0 auto; }
+      .about-frame { aspect-ratio: 3/4; }
+      .about-year { padding: 18px 22px; font-size: 1rem; bottom: -16px; right: -16px; }
       .services-grid { grid-template-columns: 1fr; gap: 2px; }
-      .gallery-mosaic { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+      .service-card { padding: 40px 28px; }
+      .service-num { font-size: 2.4rem; }
+      .service-name { font-size: 1.3rem; }
+      .service-desc { font-size: 0.78rem; line-height: 1.7; }
+      .gallery-mosaic { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; gap: 3px; }
       .mosaic-item.wide { grid-column: span 1; }
       .mosaic-item.tall { grid-row: span 1; }
-      .gallery-mosaic .mosaic-item { height: 180px; }
-      .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
-      .section { padding: 64px 24px; }
-      .hero-title { font-size: 3rem; }
+      .gallery-mosaic .mosaic-item { height: 160px; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 40px; }
+      .contact-info-item { margin-bottom: 24px; }
+      .contact-form { gap: 18px; }
+      .form-field { gap: 6px; }
+      .form-field input, .form-field textarea, .form-field select { padding: 12px 14px; font-size: 0.86rem; }
+      .form-submit { padding: 14px 32px; font-size: 0.76rem; }
+      .section { padding: 56px 20px; }
+      .section-label { font-size: 0.65rem; margin-bottom: 12px; }
+      .section-title { font-size: 2rem; }
+      .hero-title { font-size: 2.4rem; }
+      .hero-cta { padding: 12px 32px; font-size: 0.72rem; }
+      .hero-eyebrow { font-size: 0.68rem; margin-bottom: 16px; }
+      .hero-sub { font-size: 0.85rem; margin-bottom: 36px; }
+      .divider { margin: 24px 0; }
+      .about-stats { gap: 32px; margin-top: 32px; }
+      .stat-num { font-size: 2.2rem; }
+      .stat-label { font-size: 0.65rem; }
+      .footer-logo { font-size: 1.4rem; }
+      .footer-links { gap: 24px; }
+      .footer-links a { font-size: 0.65rem; }
+      .wa-btn { padding: 12px 20px; font-size: 0.75rem; gap: 10px; }
+      .wa-btn svg { width: 18px; height: 18px; }
+    }
+
+    @media (max-width: 600px) {
+      .site-nav { padding: 14px 16px; }
+      .nav-logo { font-size: 1.2rem; }
+      .section { padding: 48px 16px; }
+      .hero { min-height: 480px; }
+      .hero-title { font-size: 2rem; line-height: 1.2; }
+      .hero-sub { font-size: 0.8rem; margin-bottom: 28px; }
+      .hero-eyebrow { font-size: 0.63rem; margin-bottom: 12px; }
+      .hero-cta { padding: 11px 28px; font-size: 0.68rem; }
+      .section-title { font-size: 1.6rem; line-height: 1.3; }
+      .section-label { font-size: 0.62rem; }
+      .about-visual { max-width: 220px; }
+      .about-frame { aspect-ratio: 3/4; }
+      .about-frame-inner { width: 90%; height: 90%; }
+      .about-year { padding: 14px 18px; font-size: 0.9rem; bottom: -12px; right: -12px; }
+      .about-stats { flex-direction: column; gap: 24px; }
+      .stat-num { font-size: 2rem; }
+      .about-text p { font-size: 0.88rem; line-height: 1.8; }
+      .service-card { padding: 32px 20px; }
+      .service-num { font-size: 2rem; margin-bottom: 16px; }
+      .service-name { font-size: 1.1rem; margin-bottom: 10px; }
+      .service-desc { font-size: 0.76rem; line-height: 1.6; }
+      .service-icon svg { width: 24px; height: 24px; margin-bottom: 12px; }
+      .gallery-mosaic { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+      .gallery-mosaic .mosaic-item { height: 140px; }
+      .contact-wrap { gap: 32px; }
+      .contact-info-item { gap: 12px; margin-bottom: 20px; }
+      .contact-info-icon { width: 36px; height: 36px; }
+      .contact-info-label { font-size: 0.6rem; }
+      .contact-info-value { font-size: 0.88rem; }
+      .contact-form { gap: 16px; }
+      .form-field { gap: 5px; }
+      .form-field label { font-size: 0.64rem; }
+      .form-field input, .form-field textarea, .form-field select { padding: 11px 12px; font-size: 0.84rem; }
+      .form-submit { padding: 12px 28px; font-size: 0.72rem; }
+      .divider { margin: 20px 0; width: 36px; }
+      .mobile-menu a { font-size: 1.6rem; }
+      .footer-logo { font-size: 1.2rem; }
+      .footer-copy { font-size: 0.65rem; }
+      .footer-links { gap: 16px; }
+      .footer-links a { font-size: 0.6rem; }
+      .wa-btn { padding: 11px 18px; font-size: 0.7rem; gap: 8px; }
+      .wa-btn svg { width: 16px; height: 16px; }
     }
   </style>
   <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full"><!-- Nav -->
-  <nav class="site-nav" id="site-nav" role="navigation" aria-label="Main navigation"><a href="#home" class="nav-logo" id="nav-logo">YUGA PHOTOS</a>
+ <body class="h-full">
+  <!-- Nav -->
+  <nav class="site-nav" id="site-nav" role="navigation" aria-label="Main navigation">
+   <a href="#home" class="nav-logo" id="nav-logo">YUGA PHOTOS</a>
    <ul class="nav-links" role="list">
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
@@ -241,9 +313,11 @@
     <li><a href="#contact">Contact</a></li>
    </ul><button class="nav-menu-btn" id="nav-menu-btn" aria-label="Open menu"> <i data-lucide="menu" style="width:24px;height:24px;"></i> </button>
   </nav><!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile navigation"><button class="mobile-close" id="mobile-close" aria-label="Close menu"> <i data-lucide="x" style="width:28px;height:28px;"></i> </button> <a href="#about" class="mobile-link">About</a> <a href="#services" class="mobile-link">Services</a> <a href="#gallery" class="mobile-link">Gallery</a> <a href="#contact" class="mobile-link">Contact</a>
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile navigation">
+   <button class="mobile-close" id="mobile-close" aria-label="Close menu"> <i data-lucide="x" style="width:28px;height:28px;"></i> </button> <a href="#about" class="mobile-link">About</a> <a href="#services" class="mobile-link">Services</a> <a href="#gallery" class="mobile-link">Gallery</a> <a href="#contact" class="mobile-link">Contact</a>
   </div>
-  <main id="home"><!-- Hero -->
+  <main id="home">
+   <!-- Hero -->
    <section class="hero" aria-label="Hero section">
     <div class="hero-bg"></div>
     <div class="hero-content">
@@ -251,14 +325,16 @@
      <h1 class="hero-title" id="hero-title">Life Through<br><em>The Lens</em></h1>
      <p class="hero-sub" id="hero-sub">Wedding Photography &amp; Videography · Every emotion, preserved forever</p><a href="#contact" class="hero-cta">Book a Session</a>
     </div>
-    <div class="hero-scroll" aria-hidden="true"><span>Scroll</span> <i data-lucide="chevron-down" style="width:16px;height:16px;"></i>
+    <div class="hero-scroll" aria-hidden="true">
+     <span>Scroll</span> <i data-lucide="chevron-down" style="width:16px;height:16px;"></i>
     </div>
    </section><!-- About -->
    <section class="section" id="about" aria-labelledby="about-heading">
     <div class="about-grid">
      <div class="about-visual">
       <div class="about-frame">
-       <div class="about-frame-inner"><i data-lucide="camera" style="width:64px;height:64px;opacity:0.25;color:#c9a96e;"></i> <span class="about-frame-label">Pranavam S</span>
+       <div class="about-frame-inner">
+        <i data-lucide="camera" style="width:64px;height:64px;opacity:0.25;color:#c9a96e;"></i> <span class="about-frame-label">Pranavam S</span>
        </div>
        <div class="about-corner tl"></div>
        <div class="about-corner br"></div>
@@ -311,8 +387,7 @@
        <div class="service-num">
         01
        </div>
-       <div class="service-icon">
-        <i data-lucide="heart" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="heart" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Wedding Photography</h3>
        <p class="service-desc">Full-day coverage of your wedding ceremony, rituals, and candid celebrations. Every laugh, every tear, every glance — preserved beautifully.</p>
@@ -321,8 +396,7 @@
        <div class="service-num">
         02
        </div>
-       <div class="service-icon">
-        <i data-lucide="video" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="video" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Wedding Videography</h3>
        <p class="service-desc">Cinematic wedding films that tell your love story. From highlight reels to full-length features, we craft memories you'll relive forever.</p>
@@ -331,8 +405,7 @@
        <div class="service-num">
         03
        </div>
-       <div class="service-icon">
-        <i data-lucide="users" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="users" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Pre-Wedding Shoots</h3>
        <p class="service-desc">Creative, expressive pre-wedding sessions that capture your unique chemistry in stunning locations across Tamil Nadu.</p>
@@ -341,8 +414,7 @@
        <div class="service-num">
         04
        </div>
-       <div class="service-icon">
-        <i data-lucide="star" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="star" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Events &amp; Functions</h3>
        <p class="service-desc">Engagements, receptions, baby showers, birthdays, corporate events — we cover every celebration with professional precision.</p>
@@ -351,8 +423,7 @@
        <div class="service-num">
         05
        </div>
-       <div class="service-icon">
-        <i data-lucide="image" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="image" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Portrait Sessions</h3>
        <p class="service-desc">Personal, family, and professional portrait photography crafted to reveal your true personality in every frame.</p>
@@ -361,8 +432,7 @@
        <div class="service-num">
         06
        </div>
-       <div class="service-icon">
-        <i data-lucide="film" style="width:28px;height:28px;"></i>
+       <div class="service-icon"><i data-lucide="film" style="width:28px;height:28px;"></i>
        </div>
        <h3 class="service-name">Short Films &amp; Reels</h3>
        <p class="service-desc">Creative short films and social media reels for personal milestones, brand stories, and special announcements.</p>
@@ -377,65 +447,65 @@
      <div class="gallery-mosaic" role="list" aria-label="Photo gallery">
       <div class="mosaic-item wide" role="listitem">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m1" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="camera" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m1" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="camera" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Wedding</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Wedding</span>
        </div>
       </div>
       <div class="mosaic-item tall" role="listitem">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m3" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="heart" style="width:36px;height:36px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m3" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="heart" style="width:36px;height:36px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Portrait</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Portrait</span>
        </div>
       </div>
       <div class="mosaic-item" role="listitem">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m2" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="video" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m2" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="video" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Cinematic</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Cinematic</span>
        </div>
       </div>
       <div class="mosaic-item" role="listitem">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m4" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="image" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m4" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="image" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Events</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Events</span>
        </div>
       </div>
       <div class="mosaic-item" role="listitem">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m5" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="sun" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m5" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="sun" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Pre-Wedding</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Pre-Wedding</span>
        </div>
       </div>
       <div class="mosaic-item wide" role="listitem">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m6" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="star" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m6" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="star" style="width:40px;height:40px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Celebrations</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Celebrations</span>
        </div>
       </div>
       <div class="mosaic-item" role="listitem">
        <div class="mosaic-inner">
-        <div class="mosaic-bg m7" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><i data-lucide="film" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
+        <div class="mosaic-bg m7" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+         <i data-lucide="film" style="width:32px;height:32px;opacity:0.15;color:#c9a96e;"></i>
         </div>
        </div>
-       <div class="mosaic-overlay">
-        <span class="mosaic-label">Short Films</span>
+       <div class="mosaic-overlay"><span class="mosaic-label">Short Films</span>
        </div>
       </div>
      </div>
@@ -446,11 +516,11 @@
      <p class="section-label">Get In Touch</p>
      <h2 class="section-title" id="contact-heading">Let's create something<br><em>beautiful together</em></h2>
      <div class="divider"></div>
-     <div class="contact-wrap"><!-- Info -->
+     <div class="contact-wrap">
+      <!-- Info -->
       <div>
        <div class="contact-info-item">
-        <div class="contact-info-icon">
-         <i data-lucide="map-pin"></i>
+        <div class="contact-info-icon"><i data-lucide="map-pin"></i>
         </div>
         <div>
          <div class="contact-info-label">
@@ -462,8 +532,7 @@
         </div>
        </div>
        <div class="contact-info-item">
-        <div class="contact-info-icon">
-         <i data-lucide="mail"></i>
+        <div class="contact-info-icon"><i data-lucide="mail"></i>
         </div>
         <div>
          <div class="contact-info-label">
@@ -475,8 +544,7 @@
         </div>
        </div>
        <div class="contact-info-item">
-        <div class="contact-info-icon">
-         <i data-lucide="phone"></i>
+        <div class="contact-info-icon"><i data-lucide="phone"></i>
         </div>
         <div>
          <div class="contact-info-label">
@@ -487,17 +555,22 @@
          </div>
         </div>
        </div><a href="https://wa.me/917871727575" target="_blank" rel="noopener noreferrer" class="wa-btn" id="wa-btn">
-        <svg viewbox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+        <svg viewbox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
         </svg> Message on WhatsApp </a>
       </div><!-- Form -->
       <form class="contact-form" id="contact-form" novalidate>
-       <div class="form-field"><label for="f-name">Your Name</label> <input type="text" id="f-name" placeholder="Enter your name" required>
+       <div class="form-field">
+        <label for="f-name">Your Name</label> <input type="text" id="f-name" placeholder="Enter your name" required>
        </div>
-       <div class="form-field"><label for="f-phone">Phone Number</label> <input type="tel" id="f-phone" placeholder="Your phone number">
+       <div class="form-field">
+        <label for="f-phone">Phone Number</label> <input type="tel" id="f-phone" placeholder="Your phone number">
        </div>
-       <div class="form-field"><label for="f-service">Service Required</label> <select id="f-service"> <option value="">Select a service</option> <option>Wedding Photography</option> <option>Wedding Videography</option> <option>Pre-Wedding Shoot</option> <option>Events &amp; Functions</option> <option>Portrait Session</option> <option>Short Films &amp; Reels</option> <option>Other</option> </select>
+       <div class="form-field">
+        <label for="f-service">Service Required</label> <select id="f-service"> <option value="">Select a service</option> <option>Wedding Photography</option> <option>Wedding Videography</option> <option>Pre-Wedding Shoot</option> <option>Events &amp; Functions</option> <option>Portrait Session</option> <option>Short Films &amp; Reels</option> <option>Other</option> </select>
        </div>
-       <div class="form-field"><label for="f-message">Message</label> <textarea id="f-message" rows="4" placeholder="Tell us about your event date, location, and any special requirements..."></textarea>
+       <div class="form-field">
+        <label for="f-message">Message</label> <textarea id="f-message" rows="4" placeholder="Tell us about your event date, location, and any special requirements..."></textarea>
        </div><button type="submit" class="form-submit">Send Enquiry</button>
        <div class="form-success" id="form-success" role="alert">
         ✓ &nbsp; Thank you! We'll reach out to you shortly on WhatsApp.
@@ -511,7 +584,8 @@
    <div class="footer-logo" id="footer-logo">
     YUGA <span>PHOTOS</span>
    </div>
-   <nav class="footer-links" aria-label="Footer navigation"><a href="#about">About</a> <a href="#services">Services</a> <a href="#gallery">Gallery</a> <a href="#contact">Contact</a>
+   <nav class="footer-links" aria-label="Footer navigation">
+    <a href="#about">About</a> <a href="#services">Services</a> <a href="#gallery">Gallery</a> <a href="#contact">Contact</a>
    </nav>
    <p class="footer-copy" id="footer-copy">© 2024 Yuga Photos · Pranavam S · Coimbatore, Tamil Nadu</p>
   </footer>
@@ -634,5 +708,5 @@
     ])
   });
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e2f6fe090356470',t:'MTc3NDYyNTQzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e2f7a65d524d566',t:'MTc3NDYyNTg2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
